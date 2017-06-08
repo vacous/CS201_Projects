@@ -1,0 +1,57 @@
+Name: Zhaoxi Zhang 
+NetID: zz115
+Hours Spent: 20hr
+Consulted With: None
+Resources Used: None 
+Impressions: Good Assignment, the instruction is very clear 
+----------------------------------------------------------------------
+Problem 1: What is the order of growth (big-Oh) of the number of compares
+(in the worst case) that each of the operations in the Autocomplete data
+type make, as a function of the number of terms N, the number of matching
+terms M, and k, the number of matches returned by topKMatches for
+BinarySearchAutocomplete?
+
+O(logN)
+
+Problem 2: How does the runtime of topKMatches() vary with k, assuming a fixed prefix
+and set of terms? 
+2A BruteAutocomplete: O(klogk)
+2B BinarySearchAutocomplete: O(klogk)
+2C TrieAutocomplete: O(k)
+
+Problem 3: Look at the methods topMatch and topKMatches in BruteAutocomplete and
+BinarySearchAutocomplete and compare both their theoretical and empirical
+runtimes. Is BinarySearchAutocomplete always guaranteed to perform better
+than BruteAutocomplete? Justify your answer.
+
+In brute, 
+1. linear scan the entire list for matching terms: O(N)
+2. sort the matching terms O(MlogM)
+3. extract the k terms: O(k)
+When N is large, it will be O(N) overall  
+
+
+In binary,
+1. the terms are sorted at the beginning: O(NlogN)
+2. find the first_idx: O(logN)
+3. find the last_idx: O(logN)
+4. sort the matching terms O(MlogM)
+5. extract the k terms: O(k)
+When N is large, it will be O(NlogN) overall
+
+When N is not that large comparing to k and M 
+N + MlgM + k = NlgN + 2lgN + MlgM + k
+N =  10 or 2 
+When N is in [2,10] binary can take more than than brute, when N is in (10, inf) binary is faster.
+
+Brute for tiny.txt: Time for topKMatches("", 7) -  4.1282E-8
+Binary for tiny.txt: Time for topKMatches("", 7) -  6.3631E-8
+
+
+Problem 4: For all three of the Autocompletor implementations, how does increasing the
+size of the source and increasing the size of the prefix argument affect
+the runtime of topMatch and topKMatches? 
+Assumes the prefix length is k. 
+4A BruteAutocomplete: O(N)
+4B BinarySearchAutocomplete: O(NlogN)
+4C TrieAutocomplete: O(k)

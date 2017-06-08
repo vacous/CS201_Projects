@@ -1,0 +1,79 @@
+Name: Zuoming Dai, Zhaoxi Zhang
+NetID: zd22, zz115
+Hours 6.0 hours
+Consulted With: Zhaoxi Zhang (zz115)
+Resources Used: NONE 
+Impressions: The writeup is clear.
+----------------------------------------------------------------------
+Problem 1: Describe testing
+
+In testing HuffProcessor, we first compressed a given original file, checked if the could be successfully compressed, then decompressed the result and compared the decompressed file with the original file.
+For the test file in data repository, such as kjv10, melville, monarch, we compared the given .hf files with our compressed files. It turned out that our compressed files are the same as the given .hf files.
+In addition to the given test files, we tried pdf, rtf, dmg, tif files, and it turned out that all of them can be compressed and then decompressed to original files successfully.
+Every test file was compressed into a smaller sized file and could be decompressed back to the same file as the origin one.
+
+Also we created some special test files:
+(1) A textfile with 100000 'a' charaters. Compressed from 100000 bytes to 12570 bytes, space saved is 87.49%
+(2) An empty textfile (".rtf"). Compressed from 178 bytes to 162 bytes, space saved is 8.99%
+(3) A pdf file. Compressed from 4990909 bytes to 4852729 bytes, space saved is 2.77%
+
+Print out trees:
+We wrote a method called "printTree" in "HuffProcessor.java", and printed the tree
+(1)file content: "ab"; 
+	tree : level 0: -1; level 1: 98, -1; level 2 :97, 256.
+(2) file content: "aaaaaaaaaaaaaaaaaaaa"; level 0: -1; level 1 : 97, 256.
+
+
+
+Problem 2: Benchmark and analyze your code
+
+We used the files from "/calgary/" and "/waterloo/"
+
+"/calgary/":
+(filename, alphabet size, time, original size, compressed size, space saved rate)
+bib, 81, 0.168s, 111261 bytes, 72880 bytes, 34.50%
+book1, 82, 0.272s, 768771 bytes, 438495 bytes, 42.96%
+book2, 96, 0.294s, 610856 bytes, 368440 bytes, 39.68%
+news, 98, 0.108s, 377109 bytes, 246536 bytes, 34.62%
+geo, 256, 0.083s, 102400 bytes, 72917 bytes, 28.79%
+
+"/waterloo/":
+
+clegg.tif, 256, 0.546s, 2149096 bytes, 2033920 bytes, 5.36%
+barb.tif, 230, 0.112s, 262274 bytes, 245919 bytes, 6.24%
+forg.tif, 116, 0.06s, 309388 bytes, 193604 bytes, 37.42%
+horiz.tif, 24, 0.007s, 65666 bytes, 9564 bytes, 85.44%
+crosses.tif, 18, 0.007s, 65666 bytes, 8525 bytes, 87.02%
+
+For every test image, after compression and decompression, the result is the same as the origin image bit-by-bit.
+
+From the result we can tell that a smaller alphabet size would lead to a greater space saved rate, especially for ".tif" files.
+A larger file size will result in a longer compression time but the times are all very short for the test files.
+
+Problem 3: Text vs. Binary 
+As is shown in the data, generally, binary files are compressed more than image files. But if the image file has very small alphabet size, then the
+image file would be compressed more.
+
+Explanation:
+The binary files for testing most store text and each file has its unique alphabet, which suits our algorithm well (actually, Huffman method creates a dictionary so that less stroage is needed). 
+But most of the image file almost have every number ranging from 0 to 255 for the RGB numbers, so there is less to do with our compression algorithm.
+Hence, for some image that only has small number of RGB/grey scale, for example "crosses.tif", the spaced saved is significant after compression.
+
+Problem 4: Compressing compressed files
+We used "kjv10.txt" as the example.
+kjv10.txt -> kjv10.txt.hf : space saved is 42.72%
+kjv10.txt.uf -> kjv10.txt.hf.uf : space saved is 1.51%
+kjv10.txt.uf.uf -> kjv10.txt.hf.uf.uf : space saved is -0.05%
+
+Observation and Explanation:
+It still works in the second compression but the additional achievement is very limited. Then, it cannot be compressed for the third time.
+Because we have already compressed a file into a compressed binary form and the new compressed file is nonsence if we treat it as a original file
+and read it 8-bit by 8-bit. Since we will add a HUFF_NUMBER in the front the every time, if we cannot compress the file, we even enlarge the file.
+
+Remark 1:
+This method does not compress a file with less than 8 bytes because it takes more space to store the header, tree and PSEUDO_EOF than the original file;
+however, it does not matter because there is no need to compress a 8-bytes file.
+
+
+
+
